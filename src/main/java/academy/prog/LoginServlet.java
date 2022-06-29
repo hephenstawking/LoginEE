@@ -13,19 +13,25 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String login = request.getParameter("login");
         String password = request.getParameter("password");
-        int age = parseInt(request.getParameter("age"));
+        String age = request.getParameter("age");
         HttpSession session = request.getSession(true);
 
-        if (age < AGE) {
-            String agePerm = "Denied";
-            session.setAttribute("user_age", agePerm);
+        if (login == null || "".equals(login) || password == null || "".equals(password) || age == null || "".equals(age)) {
+            String check = "Empty";
+            session.setAttribute("empty", check);
         } else {
-            if (validatePassword(password) == false) {
-                String passCheck = "notMatch";
-                session.setAttribute("user_pass_req", passCheck);
+            int ageIng = parseInt(age);
+            if (ageIng < AGE) {
+                String agePerm = "Denied";
+                session.setAttribute("user_age", agePerm);
             } else {
-                if (LOGIN.equals(login) && PASS.equals(password)) {
-                    session.setAttribute("user_login", login);
+                if (validatePassword(password) == false) {
+                    String passCheck = "notMatch";
+                    session.setAttribute("user_pass_req", passCheck);
+                } else {
+                    if (LOGIN.equals(login) && PASS.equals(password)) {
+                        session.setAttribute("user_login", login);
+                    }
                 }
             }
         }
@@ -41,6 +47,7 @@ public class LoginServlet extends HttpServlet {
             session.removeAttribute("user_login");
             session.removeAttribute("user_age");
             session.removeAttribute("user_pass_req");
+            session.removeAttribute("empty");
 
         response.sendRedirect("index.jsp");
     }

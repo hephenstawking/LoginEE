@@ -8,9 +8,15 @@
         String login = (String)session.getAttribute("user_login");
         String agePerm = (String)session.getAttribute("user_age");
         String userPassReq = (String)session.getAttribute("user_pass_req");
+        String empty = (String)session.getAttribute("empty");
     %>
 
-    <%
+    <% if (empty != null) {
+    %>
+    <h1>You have to fill all data to log in</h1>
+    <br>Click this link to back to the <a href="/login?z=exit">login page</a>
+    <% } else {
+
 
         if (userPassReq != null) {
             %>
@@ -39,6 +45,7 @@
                 <%
             }
         }
+    }
     %>
   </body>
 </html>
